@@ -14,12 +14,12 @@
 # Sell Prices are: 5 UGT NORMAL items, 10 UGH RARE items
 # there is always 100% chance to get at least one item while gathering
 
-gathering_skill_a = 0  # 10% chance to receive an extra item
-gathering_skill_b = 0  # 15% chance to receive an extra item
-gathering_skill_c = 0  # 20% chance to receive an extra item
-gathering_skill_d = 0  # 25% chance to receive an extra item
-gathering_skill_e = 0  # 10% chance to receive an additional RARE item (worth 10 UGT)
-gathering_skill_f = 0  # 10% chance to restore 1 energy while gathering
+gathering_skill_a = 1  # 10% chance to receive an extra item
+gathering_skill_b = 1  # 15% chance to receive an extra item
+gathering_skill_c = 1  # 20% chance to receive an extra item
+gathering_skill_d = 1  # 25% chance to receive an extra item
+gathering_skill_e = 1  # 10% chance to receive an additional RARE item (worth 10 UGT)
+gathering_skill_f = 1  # 10% chance to restore 1 energy while gathering
 
 # TREASURE HUNTING SKILLS
 # Unlike gathering, treasure hunting has only a 20% base chance to produce anything.
@@ -28,22 +28,22 @@ gathering_skill_f = 0  # 10% chance to restore 1 energy while gathering
 # However they can be very lucrative.
 # Sell Prices are: 10 UGT NORMAL, 25 UGT RARE, 50 UGT EPIC, 200 UGT LEGENDARY 
 
-treasure_skill_a = 0  # +5% chance to receive and item (this increases the base chance from 20 to 25%)
-treasure_skill_b = 0  # +5% chance to receive and item (this increases the base chance from 20 to 30%)
-treasure_skill_c = 0  # +5% chance to receive and item (this increases the base chance from 20 to 35%)
-treasure_skill_d = 0  # +5% chance to receive and item (this increases the base chance from 20 to 40%)
-treasure_skill_e = 0  # +25% chance to upgrade to RARE
-treasure_skill_f = 0  # +5% chance to upgrade to EPIC
-treasure_skill_g = 0  # +1% chance to upgrade to LEGENDARY
+treasure_skill_a = 1  # +5% chance to receive and item (this increases the base chance from 20 to 25%)
+treasure_skill_b = 1  # +5% chance to receive and item (this increases the base chance from 20 to 30%)
+treasure_skill_c = 1  # +5% chance to receive and item (this increases the base chance from 20 to 35%)
+treasure_skill_d = 1  # +5% chance to receive and item (this increases the base chance from 20 to 40%)
+treasure_skill_e = 1  # +25% chance to upgrade to RARE
+treasure_skill_f = 1  # +5% chance to upgrade to EPIC
+treasure_skill_g = 1  # +1% chance to upgrade to LEGENDARY
 
 # GENERAL CHARACTER SKILLS
 
-general_skill_a = 0  # 50% chance to restore 1 energy while eating
-general_skill_b = 0  # 75% chance to restore 2 additional energy while sleeping
-general_skill_c = 0  # +20 additional inventory space
-general_skill_d = 0  # 25% chance to get 1 food from gathering
-general_skill_e = 0  # +10% increased prices
-general_skill_f = 0  # +10% increased prices 
+general_skill_a = 1  # 50% chance to restore 1 energy while eating
+general_skill_b = 1  # 75% chance to restore 2 additional energy while sleeping
+general_skill_c = 1  # +20 additional inventory space
+general_skill_d = 1  # 25% chance to get 1 food from gathering
+general_skill_e = 1  # +10% increased prices
+general_skill_f = 1  # +10% increased prices 
 
 
 

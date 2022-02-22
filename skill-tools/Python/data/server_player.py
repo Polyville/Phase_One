@@ -1,9 +1,6 @@
-import typing
 from operator import itemgetter
-from random import Random, random
-
+import random
 from .server_item import ServerItem
-
 
 class ServerPlayer:
     def __init__(self, name):
@@ -96,7 +93,7 @@ class ServerPlayer:
         self.player_hunger += 5
 
         # SKILL BONUS: 50% chance to restore 1 energy while eating
-        if self.player_skills_general[0] == 1 and Random.randrange(0,100) < 50:
+        if self.player_skills_general[0] == 1 and random.randint(0,100) < 50:
             self.player_energy += 1
 
 
@@ -104,7 +101,6 @@ class ServerPlayer:
         self.player_food_bought += quantity
         self.player_food += quantity
         self.player_money -= (quantity * 5) # each food costs 5 UGT
-        
 
 
     def sleep_one_cycle(self):
@@ -112,7 +108,7 @@ class ServerPlayer:
         self.player_energy += 5
 
         # SKILL BONUS: 75% chance to restore 2 additional energy while sleeping
-        if self.player_skills_general[1] == 1 and Random.randrange(0,100) < 75:
+        if self.player_skills_general[1] == 1 and random.randint(0,100) < 75:
             self.player_energy += 2
         
         # MAX energy is 10

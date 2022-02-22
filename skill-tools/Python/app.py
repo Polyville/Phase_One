@@ -4,7 +4,6 @@ import sys
 import random
 import datetime
 import time
-import typing
 from data.server_item import ServerItem
 from data.server_player import ServerPlayer 
 import change_skills as chsk
@@ -13,7 +12,8 @@ CURRENT_ROUND = 0
 MAX_ROUNDS = 4 * 24 * 28
 
 dict_server_players: ServerPlayer = {}
-list_treasure_prices = [25, 50, 150, 450]
+list_treasure_prices = [20, 50, 150, 450]
+list_material_prices = [10,25]
 
 
 def create_players():
@@ -34,8 +34,6 @@ def create_players():
     skilled_player.player_skills_general = chsk.c_skills
 
     dict_server_players[skilled_player.player_name] = skilled_player
-    
-
 
 
 def generate_random_int(p_name, i_min, i_max) -> int:
@@ -111,7 +109,7 @@ def reward_base_item(p_name, p_acid):
     item.itemname = itemnames[aid]
     item.itemquantity = 1
     item.itemquality = 0
-    item.itemsellprice = 10
+    item.itemsellprice = list_material_prices[0]
     item.itemtype = aid
 
     # SKILL BONUS: extra item
@@ -121,21 +119,21 @@ def reward_base_item(p_name, p_acid):
     
 
     # SKILL BONUS: upgrade to RARE item
-    if dict_server_players[p_name].player_skills_gathering[4] == 1 and generate_random_int(0,100) < 10:
+    if dict_server_players[p_name].player_skills_gathering[4] == 1 and generate_random_int(p_name, 0,100) < 10:
         item.itemname = "{}_RARE".format(itemnames[aid])
         item.itemquality = 1
-        item.itemsellprice = 20
+        item.itemsellprice = list_material_prices[1]
         dict_server_players[p_name].add_inventory_item(item)
     else:
         dict_server_players[p_name].add_inventory_item(item)
     
     # SKILL BONUS: 25% chance to receive 1 food
-    if dict_server_players[p_name].player_skills_general[3] == 1 and generate_random_int(0,100) < 25:
+    if dict_server_players[p_name].player_skills_general[3] == 1 and generate_random_int(p_name, 0,100) < 25:
         dict_server_players[p_name].player_food += 1
     
 
     # SKILL BONUS: 10% chance to restore one energy
-    if dict_server_players[p_name].player_skills_general[5] == 1 and generate_random_int(0,100) < 10:
+    if dict_server_players[p_name].player_skills_general[5] == 1 and generate_random_int(p_name, 0,100) < 10:
         dict_server_players[p_name].player_energy += 1
 
 
@@ -156,7 +154,6 @@ def reward_treasure_item(p_name, p_acid):
 
     if baseitemreceived:
         # UPGRADE?
-
         finalquality: int = 0
         finalquality = 1 if generate_random_int(p_name, 0,100) < rarechance else 0
         finalquality = 2 if generate_random_int(p_name, 0,100) < epichance else 0
@@ -169,7 +166,6 @@ def reward_treasure_item(p_name, p_acid):
         item.itemsellprice = list_treasure_prices[finalquality]
         item.itemtype = 3
         item.itemquantity = 1
-
         dict_server_players[p_name].add_inventory_item(item)
 
 
