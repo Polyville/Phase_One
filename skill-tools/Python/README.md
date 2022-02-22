@@ -2,7 +2,6 @@
 
 A set of tools for simulating various Polyville (https://polyville.life) Phase One skill builds and their impact on the final score. 
 
-## Currently Available:
-- Unity C#
-- Python
-- prebuilt Unity application
+## How to use:
+- edit "change_skills.py" to change skills
+- run app.py
