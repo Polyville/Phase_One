@@ -43,6 +43,8 @@ public class ServerPlayer
     public int PlayerActivity; // current activity
     public int PlayerRound; // helps with debug
 
+    public int work_completed = 0;
+
 
     public void ResetStats()
     {
@@ -56,7 +58,29 @@ public class ServerPlayer
         PlayerSleepCycles = 0;
         PlayerActivity = 0;
         PlayerRound = 0;
+        work_completed = 0;
     }
+
+    public string GetFinalStats()
+    {
+        string outStr = "";
+        outStr += "<color=#F88C33>TOTAL EARNED: </color>" + PlayerMoney + " UGT \n";
+
+        outStr += "<color=#F88C33>TOTAL Items Sold: </color>" + PlayerSalesQuality.Sum() + "\n";
+        outStr += "<color=#F88C33>NORMAL Sold: </color>" + PlayerSalesQuality[0] + "\n";
+        outStr += "<color=#F88C33>RARE Sold: </color>" + PlayerSalesQuality[1] + "\n";
+        outStr += "<color=#F88C33>EPIC Sold: </color>" + PlayerSalesQuality[2] + "\n";
+        outStr += "<color=#F88C33>LEGENDARY Sold: </color>" + PlayerSalesQuality[3] + "\n";
+
+        outStr += "<color=#F88C33>SLEEP Cycles: </color>" + PlayerSleepCycles + " \n";
+        outStr += "<color=#F88C33>FOOD Bought: </color>" + PlayerFoodBought + " <size=70%>(spent: "+ (PlayerFoodBought*5) +" UGT)</size> \n";
+
+        outStr += "<color=#F88C33>Work Completed: </color> " + work_completed;
+
+        return outStr;
+
+    }
+
 
     // returns # of remaining inventory slots
     public int GetRemainingInventorySpace()
@@ -112,6 +136,8 @@ public class ServerPlayer
     public void AssignWork(int workId)
     {
         PlayerActivity = workId;
+        if (workId >= 10 && workId <= 13)
+            work_completed += 1;
     }
 
     public void BuyFood(int quantity)
@@ -174,23 +200,6 @@ public class ServerPlayer
         return retval;
     }
 
-    public string GetFinalStats()
-    {
-        string outStr = "";
-        outStr += "<color=#F88C33>TOTAL EARNED: </color>" + PlayerMoney + " UGT \n";
-
-        outStr += "<color=#F88C33>TOTAL Items Sold: </color>" + PlayerSalesQuality.Sum() + "\n";
-        outStr += "<color=#F88C33>NORMAL Sold: </color>" + PlayerSalesQuality[0] + "\n";
-        outStr += "<color=#F88C33>RARE Sold: </color>" + PlayerSalesQuality[1] + "\n";
-        outStr += "<color=#F88C33>EPIC Sold: </color>" + PlayerSalesQuality[2] + "\n";
-        outStr += "<color=#F88C33>LEGENDARY Sold: </color>" + PlayerSalesQuality[3] + "\n";
-
-        outStr += "<color=#F88C33>SLEEP Cycles: </color>" + PlayerSleepCycles + " \n";
-        outStr += "<color=#F88C33>FOOD Bought: </color>" + PlayerFoodBought + " <size=70%>(spent: "+ (PlayerFoodBought*5) +" UGT)</size> \n";
-
-        return outStr;
-
-    }
 
     public void PrintDebugStats()
     {

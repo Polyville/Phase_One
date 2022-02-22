@@ -7,4 +7,6 @@ public class ServerItem
     public float ItemSellPrice; // Sell Price
     public int ItemQuality; // 0 Normal, 1 Rare, 2 Epic, 3 Legendary
     public int ItemQuantity;
+
+
 }

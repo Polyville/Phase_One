@@ -14,7 +14,7 @@ public class SimulationManager : MonoBehaviour
     // UI results
     public TextMeshProUGUI label_resultsothers;
     public TextMeshProUGUI label_resultsplayer;
-
+    public Button restartButton;
 
     // SKILL UI
     public List<Image> skillSelectorsGathering;
@@ -25,23 +25,24 @@ public class SimulationManager : MonoBehaviour
 
     private int ROUND = 1;  // current round 
     private int MAXROUNDS = 4 * 24 * 28; // maximum number of rounds
-    private List<int> treasurePrices = new List<int>() { 10, 25, 50, 200 };
+    private List<int> treasurePrices = new List<int>() { 20, 50, 150, 450 };
     private List<ServerPlayer> PlayerList = new List<ServerPlayer>();  // list of players (max 10)
 
-    
+
     void Start()
     {
         asrc = GetComponent<AudioSource>();
-        MAXROUNDS = (24 * 4 * 7 * 28);
+        MAXROUNDS = (24 * 4 * 28);
         InitPlayers();
         //InitSimulation();
     }
-    
+
     // RESET everything and start
     public void RestartSim()
     {
+        restartButton.enabled = false;
         ROUND = 1;
-        foreach(ServerPlayer p in PlayerList)
+        foreach (ServerPlayer p in PlayerList)
         {
             p.ResetStats();
         }
@@ -66,9 +67,9 @@ public class SimulationManager : MonoBehaviour
     public void SimLoop()
     {
 
-        while(ROUND <= MAXROUNDS)
+        while (ROUND <= MAXROUNDS)
         {
-            for (int i=0; i < PlayerList.Count; i++)
+            for (int i = 0; i < PlayerList.Count; i++)
             {
                 PlayerList[i].PlayerRound = ROUND;
 
@@ -82,7 +83,7 @@ public class SimulationManager : MonoBehaviour
                 // HEALTH CHECK
                 int healthchcekresult = CheckPlayerHealth(i);
 
-                if(healthchcekresult != 0)
+                if (healthchcekresult != 0)
                 {
                     // player did NOT pass the check
                     PlayerList[i].AssignWork(healthchcekresult);
@@ -99,7 +100,7 @@ public class SimulationManager : MonoBehaviour
         }
 
         // SELL ALL ITEMS
-        foreach(ServerPlayer pl in PlayerList)
+        foreach (ServerPlayer pl in PlayerList)
         {
             pl.SellAllItems();
         }
@@ -115,7 +116,7 @@ public class SimulationManager : MonoBehaviour
     // TEST ONLY
     private void DebugPrintResults()
     {
-        foreach(ServerPlayer pl in PlayerList)
+        foreach (ServerPlayer pl in PlayerList)
         {
             Debug.Log(pl.PlayerName + ": " + pl.PlayerMoney.ToString() + " UGT");
         }
@@ -125,8 +126,8 @@ public class SimulationManager : MonoBehaviour
     private void InitPlayers()
     {
         PlayerList.Clear();
-        
-        for(int i = 0; i<10; i++)
+
+        for (int i = 0; i < 10; i++)
         {
             ServerPlayer p = new ServerPlayer()
             {
@@ -155,7 +156,7 @@ public class SimulationManager : MonoBehaviour
     }
 
     // handles clicks from skill UI
-    public void AssignSkill( int skillIndex)
+    public void AssignSkill(int skillIndex)
     {
 
         asrc.Play();
@@ -167,9 +168,9 @@ public class SimulationManager : MonoBehaviour
         {
             if (!PlayerList[0].IsSkillSelected(skillIndex - 10, 1))
             {
-                if(skillIndex - 10 > 0 && !PlayerList[0].IsSkillSelected(skillIndex - 10 - 1, 1))
+                if (skillIndex - 10 > 0 && !PlayerList[0].IsSkillSelected(skillIndex - 10 - 1, 1))
                     return;  // PREVIOUS SKILL NEEDS TO HAVE 1 POINT
-                PlayerList[0].PlayerSkillsGathering[skillIndex-10] = 1;
+                PlayerList[0].PlayerSkillsGathering[skillIndex - 10] = 1;
                 skillSelectorsGathering[skillIndex - 10].color = green;
             }
             else
@@ -215,7 +216,7 @@ public class SimulationManager : MonoBehaviour
         // UI 
         int count_selected_skills = PlayerList[0].PlayerSkillsGeneral.Sum() + PlayerList[0].PlayerSkillsTreasure.Sum() + PlayerList[0].PlayerSkillsGathering.Sum();
         label_skillcount.text = "Skills Selected: " + count_selected_skills;
-        label_skillcost.text = "Skill Cost: " + (count_selected_skills * 1000) + "UGT"; 
+        label_skillcost.text = "Skill Cost: " + (count_selected_skills * 200) + " <size=70%>UGT</size>";
 
 
     }
@@ -236,7 +237,7 @@ public class SimulationManager : MonoBehaviour
         int activityId = PlayerList[PlrId].PlayerActivity;
 
         // reward gathering
-        if (activityId >=  10 && activityId <= 12)
+        if (activityId >= 10 && activityId <= 12)
             RewardBaseItem(PlrId, activityId);
 
         // reward treasure
@@ -280,7 +281,7 @@ public class SimulationManager : MonoBehaviour
                 return 5; // LOW on food: visit vendor
             else
                 return 3; // player needs to EAT food
-        }       
+        }
 
         // CHECK INVENTORY
         if (PlayerList[PlrId].GetRemainingInventorySpace() <= 0)
@@ -305,7 +306,7 @@ public class SimulationManager : MonoBehaviour
         legendarychance += (PlayerList[PlrId].PlayerSkillsTreasure[6] * 1);
 
         bool baseitemreceived = UnityEngine.Random.Range(0, 100) < basechance;
-        
+
         if (baseitemreceived)
         {
             // UPGRADE (?)
@@ -333,46 +334,49 @@ public class SimulationManager : MonoBehaviour
     {
         // REWARD WOOD, STONE or OTHER ITEM (ActivityId 10, 11, 12)
         int aid = ActivityId - 10;
-        string[] itemnames = { "Wood","Stone","Item" };
+        string[] itemnames = { "Wood", "Stone", "Item" };
 
         ServerItem item = new ServerItem()
         {
             ItemId = ROUND,
             ItemName = itemnames[aid],
             ItemQuantity = 1,
-            ItemSellPrice = 5,
+            ItemSellPrice = 10, // 10 UGT normal item
             ItemType = aid,
             ItemQuality = 0
         };
 
         // SKILL BONUS: extra item
         int extraitemchance = PlayerList[PlrId].GetGatheringSkillExtraItemChance();
-        if(extraitemchance>0 && UnityEngine.Random.Range(0, 100) < extraitemchance)
+        if (extraitemchance > 0 && UnityEngine.Random.Range(0, 100) < extraitemchance)
         {
             PlayerList[PlrId].AddInventoryItem(item);
         }
 
-        
+
 
         // SKILL BONUS: upgrade to RARE
         if (PlayerList[PlrId].PlayerSkillsGathering[4] == 1 && UnityEngine.Random.Range(0, 100) < 10)
         {
             item.ItemName = itemnames[aid] + "_RARE";
             item.ItemQuality = 1;
-            item.ItemSellPrice = 10;
+            item.ItemSellPrice = 25; // 25 UGT RARE item
             PlayerList[PlrId].AddInventoryItem(item);
-        }else{
+        }
+        else
+        {
             // only ADD 1st item - no upgrade
             PlayerList[PlrId].AddInventoryItem(item);
         }
 
         // SKILL BONUS: 25% chance to receive 1 food
-        if(PlayerList[PlrId].PlayerSkillsGeneral[3] == 1 && UnityEngine.Random.Range(0, 100) < 25){
+        if (PlayerList[PlrId].PlayerSkillsGeneral[3] == 1 && UnityEngine.Random.Range(0, 100) < 25)
+        {
             PlayerList[PlrId].PlayerFood += 1;
         }
 
         // SKILL BONUS: 10% chance to restore one energy
-        if(PlayerList[PlrId].PlayerSkillsGeneral[5] == 1 && UnityEngine.Random.Range(0, 100) < 10)
+        if (PlayerList[PlrId].PlayerSkillsGeneral[5] == 1 && UnityEngine.Random.Range(0, 100) < 10)
         {
             PlayerList[PlrId].PlayerEnergy += 1;
         }
@@ -399,24 +403,29 @@ public class SimulationManager : MonoBehaviour
     private void RewardSleep(int PlrId, int ActivityId)
     {
         // sleep ONE cycle
-        PlayerList[PlrId].SleepOneCycle();       
+        PlayerList[PlrId].SleepOneCycle();
     }
 
     // PRINT RESULTS
-    private IEnumerator PrintSimResults(float delay) 
+    private IEnumerator PrintSimResults(float delay)
     {
-        for (int i=1; i<PlayerList.Count; i++)
+        for (int i = 1; i < PlayerList.Count; i++)
         {
             yield return new WaitForSeconds(delay);
             label_resultsothers.text = label_resultsothers.text + " " + PlayerList[i].PlayerName + ": " + PlayerList[i].PlayerMoney + " UGT\n";
         }
 
         label_resultsplayer.text = PlayerList[0].GetFinalStats();
-
+        restartButton.enabled = true;
     }
 
     public void PlayButtonAudio()
     {
         asrc.Play();
+    }
+
+    public void OpenWeb()
+    {
+        Application.OpenURL("https://polyville.life/");
     }
 }
