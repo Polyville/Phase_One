@@ -14,4 +14,4 @@ Requires TextMeshPro to be installed (with BOTH options).
 * Open and Start "RUN_ME" scene
 
 ## Download Prebuild Version
-A prebuilt version is available: soon
+A prebuilt version is available: https://objectstorage.us-phoenix-1.oraclecloud.com/n/axok2zfomnhj/b/polyville-cdn/o/polyville_p1_tools_0.1.4win.zip
